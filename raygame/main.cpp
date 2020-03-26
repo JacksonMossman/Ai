@@ -1,32 +1,43 @@
-/*******************************************************************************************
-*
-*   raylib [core] example - basic window
-*
-*   This example has been created using raylib 1.0 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
-*
-*   Copyright (c) 2013-2016 Ramon Santamaria (@raysan5)
-*
-********************************************************************************************/
 
 #include "raylib.h"
+#include "KeyboardBehavior.h"
+#include"SeekBehavior.h"
+#include "FleeBehavior.h"
+#include "WanderBehavior.h"
 
 int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 800;
-	int screenHeight = 450;
+	int screenWidth = 1600;
+	int screenHeight = 900;
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
+
+	Agent* player = new Agent();
+	player->setPosition({ 100,100 });
+	KeyboardBehavior* keyboardBehavior = new KeyboardBehavior;
+	player->addBehaviour(keyboardBehavior);
+	
+
+	Agent* enemy = new Agent();
+	enemy->setPosition({ 500,500 });
+	WanderBehavior* wanderBehavior = new WanderBehavior();
+	
+	
+	enemy->addBehaviour(wanderBehavior);
+
+
 	//--------------------------------------------------------------------------------------
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
 	{
 		// Update
+		player->update(GetFrameTime());
+		enemy->update(GetFrameTime());
 		//----------------------------------------------------------------------------------
 		// TODO: Update your variables here
 		//----------------------------------------------------------------------------------
@@ -35,9 +46,11 @@ int main()
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
+		player->draw();
+		enemy->draw();
+		ClearBackground(BLACK);
 
-		DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+		//DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------
